@@ -5,7 +5,9 @@ import {styles} from './styles'
 export function Home(){
     return(
         <View style={styles.container}>
-            <Text>Teste</Text>
+            <View style={styles.header}>
+
+            </View>
         </View>
     )
 }
