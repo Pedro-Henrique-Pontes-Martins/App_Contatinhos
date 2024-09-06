@@ -5,6 +5,7 @@ import { theme } from "@/themes";
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: theme.colors.gray_200
     },
     header: {
         width: "100%",
@@ -14,6 +15,6 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 24, /*para descolar dos cantos*/
     },
     input: {
-        marginBottom: 27, /* metade da altura do input (54), para ficar na entrelinha*/
+        marginBottom: -27, /* metade da altura do input (54), para ficar na entrelinha*/
     },
 })
