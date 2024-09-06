@@ -23,7 +23,10 @@ export function Home(){
                 </Feather>
                 </Input>
             </View>
-            <Contact/>
+            <Contact contact={{
+                name: "Pedroso",
+                image: require("@/assets/avatar.jpeg")
+            }}/>
         </View>
     )
 }
