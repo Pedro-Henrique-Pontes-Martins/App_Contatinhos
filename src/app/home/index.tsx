@@ -1,4 +1,4 @@
-import {Alert, View, SectionList, Text  } from "react-native";
+import {Alert, View, SectionList, Text,   } from "react-native";
 import {Feather} from "@expo/vector-icons"
 
 import {styles} from './styles'
@@ -7,31 +7,51 @@ import { theme } from "@/themes";
 
 import * as Contacts from 'expo-contacts'
 
-import { useState, useEffect} from "react";
+import { useState, useEffect, useId} from "react";
 
 import {Contact, ContactProps} from "@/app/components/contact"
 
 type SectionListDataProps = {
+    id: string,
     title: string,
     data: ContactProps //Contato já está tipado
 }
 
-async function fetchContacts() {
-    const [contacts, setContacts] = useState<SectionListDataProps[]>([])
-    try{
-        const {status} = await Contacts.requestPermissionsAsync()
-        if(status === Contacts.PermissionStatus.GRANTED){
-            const {data} = await Contacts.getContactsAsync()
-            console.log(data)
-        }
-        
-    } catch(error){
-        console.log(error)
-        Alert.alert("Contatos", "Não foi possível carregar os contatos...")
-    }
-}
-
 export function Home(){
+
+    async function fetchContacts() {
+        const [contacts, setContacts] = useState<SectionListDataProps[]>([])
+        try{
+            const {status} = await Contacts.requestPermissionsAsync()
+            if(status === Contacts.PermissionStatus.GRANTED){
+                const {data} = await Contacts.getContactsAsync()
+                const list = data.map((contact) => ({
+                    id: contact.id ?? useId(),
+                    name: contact.name,
+                    image: contact.image,
+                })).reduce<SectionListDataProps[]>((acc: any, item) => {
+                    const firstLetter = item.name[0].toUpperCase()
+
+                    const existingEntry = acc.find((entry: SectionListDataProps) => 
+                    (entry.title === firstLetter))
+
+                    if(existingEntry){
+                        existingEntry.data.push(item)
+                    } else{
+                        acc.push({title: firstLetter, data: [item]})
+                    }
+
+                    return acc
+                }, [])
+                setContacts(list)
+            }
+            
+        } catch(error){
+            console.log(error)
+            Alert.alert("Contatos", "Não foi possível carregar os contatos...")
+        }
+    }
+
     const [name, setName] = useState("")
     const [contacts, setContacts] = useState<SectionListDataProps[]>([])
 
@@ -58,10 +78,7 @@ export function Home(){
                 sections={[{title: "R", data: [{id: "1", name: "Heloísa"}] }]}
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => (
-                    <Contact contact={{
-                        name: "Roberto",
-                        image: require("@/assets/avatar.jpeg")
-                    }}  />
+                    <Contact contact={item} />
                 )}
                 renderSectionHeader = {({section}) => 
                     (<Text style={styles.section}>{section.title}</Text>)}
