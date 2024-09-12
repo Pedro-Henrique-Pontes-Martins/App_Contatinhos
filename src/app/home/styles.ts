@@ -17,4 +17,18 @@ export const styles = StyleSheet.create({
     input: {
         marginBottom: -27, /* metade da altura do input (54), para ficar na entrelinha*/
     },
+    section: {
+        fontSize: 18,
+        fontFamily: theme.fontFamily.bold,
+        backgroundColor: theme.colors.blue,
+        width: 35,
+        height: 35,
+        color: theme.colors.white,
+        textAlign: "center",
+        textAlignVertical: "center",
+        borderRadius: 12,
+    },
+    contentList:{
+        
+    }
 })
